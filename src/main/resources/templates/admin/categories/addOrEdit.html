@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{admin/layout-admin}">
+<head>
+<title>Thêm/Sửa Category</title>
+</head>
+<body>
+	<section layout:fragment="content">
+		<div class="row justify-content-center">
+			<div class="col-md-7">
+				<div class="card shadow-sm">
+					<div class="card-header bg-primary text-white">
+						<h5 class="mb-0">
+							<i class="bi bi-pencil-fill me-2"></i>
+							<!-- Tiêu đề thay đổi linh hoạt theo biến isEdit -->
+							<span
+								th:text="${category.isEdit} ? 'Cập Nhật Category' : 'Thêm Mới Category'"></span>
+						</h5>
+					</div>
+					<div class="card-body">
+						<!-- Form liên kết với đối tượng category trong Model -->
+						<form th:action="@{/admin/categories/saveOrUpdate}" method="post"
+							th:object="${category}">
+
+							<!-- Ẩn cờ isEdit để Controller biết là đang Thêm hay Sửa -->
+							<input type="hidden" th:field="*{isEdit}">
+
+							<!-- Category ID (Chỉ hiển thị khi đang Sửa) -->
+							<div class="mb-3" th:if="${category.isEdit}">
+								<label class="form-label fw-bold">Mã Category (ID):</label> <input
+									type="text" class="form-control bg-light"
+									th:field="*{categoryId}" readonly>
+							</div>
+
+							<!-- Tên Category -->
+							<div class="mb-3">
+								<label class="form-label fw-bold">Tên Category <span
+									class="text-danger">*</span>:
+								</label> <input type="text" class="form-control" th:field="*{name}"
+									placeholder="Nhập tên category...">
+								<!-- Hiển thị thông báo lỗi Validation nếu để trống -->
+								<small class="text-danger fw-bold"
+									th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></small>
+							</div>
+
+							<!-- Trạng thái -->
+							<div class="mb-3">
+								<label class="form-label fw-bold">Trạng thái:</label> <select
+									class="form-select" th:field="*{status}">
+									<option value="1">Hoạt động</option>
+									<option value="0">Khóa</option>
+								</select>
+							</div>
+
+							<!-- Nút bấm hành động -->
+							<div class="d-flex gap-2">
+								<button type="submit" class="btn btn-success">
+									<i class="bi bi-save"></i> Lưu Category
+								</button>
+								<a th:href="@{/admin/categories/searchpaginated}"
+									class="btn btn-secondary"> <i
+									class="bi bi-arrow-left-circle"></i> Danh sách
+								</a>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</body>
+</html>
